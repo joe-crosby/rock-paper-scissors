@@ -8,14 +8,13 @@ function computerPlay() {
 
 function playRound(playerSelection, computerSelection) {
   // Create playRound scope variables
-  let selection = capFirst(playerSelection);
   let youWin = false;
 
   // When both selections are equal, it is a draw.
-  if (selection === computerSelection)
+  if (playerSelection === computerSelection)
     return -1;
 
-  switch (selection){
+  switch (playerSelection){
     // When 'Rock'
     case options[0]:
           // Win when computer did not select 'Paper'
@@ -37,20 +36,36 @@ function playRound(playerSelection, computerSelection) {
   return Number(youWin);
 }
 
-function game(count) {
+function howManyRounds(){
+  // Declare a variable to hold the number of rounds
+  let nbrRounds;
+
+  // Ask the user how many rounds to play
+  do{
+    nbrRounds = prompt("How many rounds would you like to play?");
+  }
+  while (nbrRounds !== null && !Number(nbrRounds));
+
+  return nbrRounds;
+}
+
+function game() {
   // Clear the console so the usaer can easily view the results
   console.clear();
 
   // Create game scope variables
-  let replayCount = count;
+  let count = howManyRounds();
+  if (!count)
+    return;
   let userScore = 0;
   let computerScore = 0;
   let stop;
+  let roundResult = '';
 
   while(count > 0){
     // Create while scope variables
     let verdict;
-    let selection = prompt("Make your selection: "); // Initialize with user input
+    let selection = capFirst(prompt(`${roundResult}\nMake your selection: `)); // Initialize with user input
     let compSelection = computerPlay();
 
     // If cancelled exit
@@ -72,8 +87,8 @@ function game(count) {
     else if (verdict === 0)
       computerScore++;
 
-    // Display the results for this round in the console
-    console.log(getRounResultMessage(verdict, selection, compSelection));
+    // Get the results of the round
+    roundResult = getRounResultMessage(verdict, selection, compSelection);
 
     // Decrease the count
     count--;
@@ -83,13 +98,14 @@ function game(count) {
   if(stop)
     return;
 
-  if(confirm(`${getGameResult(userScore, computerScore)}\n\nWould you like to play again?`))
-    game(replayCount);
+  // Display the last round result, the game results, and ask the user if they want to play again
+  if(confirm(`${roundResult}\n\n${getGameResult(userScore, computerScore)}\n\nWould you like to play again?`))
+    game();
 }
 
 // Validate the selection
 function isValid(s){
-  return options.includes(capFirst(s));
+  return options.includes(s);
 }
 
 // Convert the string to lowercase with the first character capitalized
@@ -98,10 +114,12 @@ function capFirst(s) {
 }
 
 function getRounResultMessage(verdict, plSelection, compSelection) {
-  return verdict === -1 ? `Draw! you both choose ${compSelection}`: verdict === 0 ? `You lose! ${compSelection} beats ${plSelection}` : `You win! ${plSelection} beats ${compSelection}`;
+  return verdict === -1 ? `Draw! you both choose ${compSelection}`: verdict === 0 ? `You lost this round! ${compSelection} beats ${plSelection}` : `You won this round! ${plSelection} beats ${compSelection}`;
 }
 
 // Calculate the results
 function getGameResult(userScore, compScore) {
-  return userScore > compScore ? "You win, Good Job!" : userScore < compScore ? "Sorry, but you stink!" : "This game is a wash!";
+  let result = userScore > compScore ? "You win, Good Job!" : userScore < compScore ? "Sorry, but you stink!" : "This game is a wash!";
+
+  return result + `\n\nUser: ${userScore}\nComputer: ${compScore}`;;
 }
