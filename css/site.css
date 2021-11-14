@@ -1,0 +1,202 @@
+html, button {
+  font-family: 'Courgette', cursive;
+}
+
+.body-background {
+  background: #a7c7c7;
+}
+
+.container  {
+  height: 100vh;
+}
+
+.container, #main {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#main {
+  display: none;
+  height: 100%;
+}
+
+#game_over {
+  display: none;
+}
+
+#game_over > div {
+  margin-bottom: 20px;
+}
+
+#game_over_message {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.results {
+  width: 50vw;
+  justify-content: space-around;
+}
+
+.info, button {
+  font-size: 35px;
+}
+
+#message {
+  position: absolute;
+  font-size: 85px;
+  font-weight: bolder;
+  color: #000000;
+}
+
+.fade {
+  z-index: -1;
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fade-in 2s;
+}
+
+@keyframes fade-in {
+  0% {
+    z-index: 1;
+    margin-top: -20vh;
+    opacity: 0;
+  }
+
+  50% {
+    margin-top: 0px;
+    opacity: 1;
+  }
+
+  60%{
+    opacity: .8;
+  }
+
+  70%{
+    opacity: .6;
+  }
+
+  80%{
+    opacity: .4;
+  }
+
+  90 {
+    opacity: .3;
+  }
+
+  100% {
+    z-index: 1;
+    opacity: 0;
+  }
+}
+
+.game-button {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 10rem;
+  height: 10rem;
+  border: 2px solid #000000;
+  border-radius: 25%;
+  margin: 20px;
+  text-align: center;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #b18961;
+  box-shadow: 5px 5px 15px #000000;
+}
+
+.round {
+  box-shadow: 5px 5px 20px #000000;
+  border: none;
+  border-radius: 50%;
+}
+
+.color-dark-blue {
+  color: #1667e5;
+}
+
+.button-label {
+  text-align: center;
+  font-size: 26px;
+}
+
+.button-label :hover {
+  border-color: #1c6799;
+  background-color: #c99a6c;
+}
+
+.rock {
+  background-image: url('../images/rock.png');
+}
+
+.paper {
+  background-image: url('../images/paper.png');
+}
+
+.scissors {
+  background-image: url('../images/scissors.png');
+}
+
+.game-button > img {
+  max-width: 8rem;
+  max-height: 8rem;
+}
+
+.score {
+  color: #ff0100;
+}
+
+.column {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.row {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.center {
+  justify-content: center;
+  align-items: center;
+}
+
+button {
+  min-width: 15rem;
+  margin-top: 5px;
+  padding: 20px 10px;
+  background: #000065;
+  color: #FFFFFF;
+  border-radius: 25px;
+  box-shadow: 5px 5px 15px #000000;
+}
+
+button:hover {
+  background: #3895ab;
+}
+
+p {
+  margin-bottom: 5px;
+}
+
+.slidein-up {
+  animation-duration: 4s;
+  animation-name: slidein-up;
+}
+
+@keyframes slidein-up {
+  from {
+    margin-top: 100%;
+  }
+
+  to {
+    margin-top: 0%;
+  }
+}

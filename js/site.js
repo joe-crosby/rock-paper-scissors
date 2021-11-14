@@ -1,5 +1,8 @@
-// Global collection of options for the game
+// Global variables for the game
 const options = ['Rock', 'Paper', 'Scissors'];
+const bestOf = 5;
+let userScore = 0;
+let computerScore = 0;
 
 function computerPlay() {
   // Generate a random number 0 - 2 to auto select the computer selection
@@ -36,90 +39,123 @@ function playRound(playerSelection, computerSelection) {
   return Number(youWin);
 }
 
-function howManyRounds(){
-  // Declare a variable to hold the number of rounds
-  let nbrRounds;
-
-  // Ask the user how many rounds to play
-  do{
-    nbrRounds = prompt("How many rounds would you like to play?");
-  }
-  while (nbrRounds !== null && !Number(nbrRounds));
-
-  return nbrRounds;
+function getRounResultMessage(verdict, plSelection, compSelection) {
+  return verdict === -1 ? `Draw!`: verdict === 0 ? `${compSelection} beats ${plSelection}` : `${plSelection} beats ${compSelection}`;
 }
 
-function game() {
-  // Clear the console so the usaer can easily view the results
-  console.clear();
+// Calculate the results
+function getGameResult(userScore, compScore) {
+  let result = userScore > compScore ? "Horray, You won!" : userScore < compScore ? "Sorry, you lost!" : "This game was a wash!";
 
-  // Create game scope variables
-  let count = howManyRounds();
-  if (!count)
-    return;
-  let userScore = 0;
-  let computerScore = 0;
-  let stop;
-  let roundResult = '';
+  return result;
+}
 
-  while(count > 0){
-    // Create while scope variables
-    let verdict;
-    let selection = capFirst(prompt(`${roundResult}\nMake your selection: `)); // Initialize with user input
-    let compSelection = computerPlay();
+function Initialize(reinitialize) {
+    userScore = 0;
+    computerScore = 0;
 
-    // If cancelled exit
-    if (!selection) {
-      stop = true;
-      break;
-    }
+    addClickEventListeners(true);
 
-    // If the value is invald ask again
-    if (!isValid(selection))
-      continue;
+    updateScores();
 
-    // Get the verdict
-    verdict = playRound(selection, compSelection);
+    if (reinitialize)
+      return;
 
+    document.getElementById("restart_button").addEventListener('click', replay);
+    document.getElementById("new_game").addEventListener('click', replay);
+}
+
+function updateUI(verdict, selection, computerSelection){
     // Increase the score
     if (verdict === 1)
       userScore++;
     else if (verdict === 0)
       computerScore++;
 
-    // Get the results of the round
-    roundResult = getRounResultMessage(verdict, selection, compSelection);
+    setMessage(getRounResultMessage(verdict, selection, computerSelection));
 
-    // Decrease the count
-    count--;
-  }
+    fadeInMessage(document.getElementById("message"));
+}
 
-  // If the user presses cancel, stop
-  if(stop)
+function setMessage(message){
+  document.getElementById("message").textContent = message;
+}
+
+function fadeInMessage(element){
+  removeClickEventListeners();
+
+  // fade in
+  element.classList.add("fade-in");
+  // fade out
+  element.addEventListener("webkitAnimationEnd", removeFade);
+}
+
+function removeFade(e){
+  if (!e)
     return;
 
-  // Display the last round result, the game results, and ask the user if they want to play again
-  if(confirm(`${roundResult}\n\n${getGameResult(userScore, computerScore)}\n\nWould you like to play again?`))
-    game();
+  this.removeEventListener("webkitAnimationEnd", removeFade);
+  this.classList.remove("fade-in");
+
+  updateScores();
+
+  addClickEventListeners();
+
+  if(gameIsOver())
+    endGame();
 }
 
-// Validate the selection
-function isValid(s){
-  return options.includes(s);
+function gameIsOver() {
+  return userScore === bestOf || computerScore === bestOf ? true : false;
 }
 
-// Convert the string to lowercase with the first character capitalized
-function capFirst(s) {
-  return s[0].toUpperCase() + s.slice(1).toLowerCase();
+function addClickEventListeners(initialize){
+  if (gameIsOver())
+    return;
+
+  setTimeout(() => {
+    let element = document.querySelectorAll(".button-label");
+    element.forEach((ele) => {
+      ele.addEventListener('click', selectionChoosen);
+    });
+  }, initialize ? 0 : 2000);
 }
 
-function getRounResultMessage(verdict, plSelection, compSelection) {
-  return verdict === -1 ? `Draw! you both choose ${compSelection}`: verdict === 0 ? `You lost this round! ${compSelection} beats ${plSelection}` : `You won this round! ${plSelection} beats ${compSelection}`;
+function removeClickEventListeners(){
+  let element = document.querySelectorAll(".button-label");
+  element.forEach((ele) => {
+    ele.removeEventListener('click', selectionChoosen);
+  });
 }
 
-// Calculate the results
-function getGameResult(userScore, compScore) {
-  let result = userScore > compScore ? "You win, Good Job!" : userScore < compScore ? "Sorry, but you stink!" : "This game is a wash!";
-
-  return result + `\n\nUser: ${userScore}\nComputer: ${compScore}`;;
+function updateScores() {
+  document.getElementById("userScore").textContent = userScore;
+  document.getElementById("computerScore").textContent = computerScore;
 }
+
+function selectionChoosen(e) {
+  // Play a round and update the UI with the results
+  let computerSelection = computerPlay();
+  updateUI(playRound(e.currentTarget.id, computerSelection), e.currentTarget.id, computerSelection);
+}
+
+function endGame(){
+  removeClickEventListeners();
+  setTimeout(() => {
+    document.getElementById("main").style.display = 'none';
+    document.getElementById("game_over").style.display = 'flex';
+    document.getElementById("game_over_message").textContent = getGameResult(userScore, computerScore);
+  }, 3000);
+}
+
+function replay(){
+  document.getElementById("main").style.display = 'flex';
+  document.getElementById("intro").style.display = 'none';
+  document.getElementById("game_over").style.display = 'none';
+  Initialize(true);
+  // Display the initial message.
+  setMessage("Good Luck!");
+  fadeInMessage(document.getElementById("message"));
+}
+
+Initialize();

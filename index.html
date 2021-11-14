@@ -1,5 +1,54 @@
-<script type="text/javascript" src="./js/site.js"></script>
-<script type="text/javascript">
-  // Start the game
-  game();
-</script>
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <script type="text/javascript" src="./js/site.js" defer></script>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/site.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+    <title class="title">Rock Paper Scissors</title>
+    <link rel="icon" href="images/rock.png">
+  </head>
+  <body class="container body-background">
+    <div id="intro" class="slidein-up info column center color-dark-blue">
+      <p class="slidein-up">Rock, Paper, Scissors</p>
+      <div class="row slidein-up">
+        <div class="game-button rock round"></div>
+        <div class="game-button paper round"></div>
+        <div class="game-button scissors round"></div>
+      </div>
+      <p class="slidein-up">Best of 5</p>
+      <p class="slidein-up">Are you ready?</p>
+      <button id="new_game" class="slidein-up" type="button" name="button">Challenge Accepted!</button>
+    </div>
+    <div id="game_over" class="info column center color-dark-blue">
+      <p>GAME OVER</p>
+      <p id="game_over_message"></p>
+      <button id="restart_button" type="button" name="button">Restart</button>
+    </div>
+    <div id="main">
+      <div id="message" class="info fade"></div>
+      <div class="results row info">
+        <div class="score">You: <label id="userScore">0</label></div>
+        <div class="score">Computer: <label id="computerScore">0</label></div>
+      </div>
+      <div class="row">
+        <div id="Rock" class="button-label">
+          <div class="game-button rock"></div>
+          Rock
+        </div>
+        <div id="Paper" class="button-label">
+          <div class="game-button paper"></div>
+          Paper
+        </div>
+        <div id="Scissors" class="button-label">
+          <div class="game-button scissors"></div>
+          Scissors
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
